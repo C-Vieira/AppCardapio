@@ -34,6 +34,13 @@ class MainActivity : AppCompatActivity() {
             .error(ColorDrawable(Color.LTGRAY))
             .into(binding.imageView)
 
+        binding.forgotPasswordButton.setOnClickListener{
+            // Invoke RecoverPasswordActivity
+            Intent(applicationContext, RecoverPasswordActivity::class.java).also {
+                startActivity(it)
+            }
+        }
+
         binding.accountRegisterButton.setOnClickListener{
             // Invoke UserRegisterActivity
             Intent(applicationContext, UserRegisterActivity::class.java).also {
