@@ -1,5 +1,6 @@
 package com.example.appcardapio
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -32,5 +33,12 @@ class MainActivity : AppCompatActivity() {
             .placeholder(ColorDrawable(Color.BLACK))
             .error(ColorDrawable(Color.LTGRAY))
             .into(binding.imageView)
+
+        binding.accountRegisterButton.setOnClickListener{
+            // Invoke UserRegisterActivity
+            Intent(applicationContext, UserRegisterActivity::class.java).also {
+                startActivity(it)
+            }
+        }
     }
 }
