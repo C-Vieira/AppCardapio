@@ -1,6 +1,7 @@
 package com.example.appcardapio
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appcardapio.databinding.MenuViewBinding
@@ -42,11 +43,9 @@ class MenuActivity: Activity() {
     }
 
     private fun onListItemClicked(item: MenuItem){
-        Snackbar.make(findViewById(android.R.id.content), "Item Selected: ${item.name}", Snackbar.LENGTH_LONG).show()
-
         // Invoke MenuItemDetailsActivity
-        /*Intent(applicationContext, MenuItemDetailsActivity::class.java).also {
+        Intent(applicationContext, MenuItemDetailsActivity::class.java).also {
             startActivity(it)
-        }*/
+        }
     }
 }
