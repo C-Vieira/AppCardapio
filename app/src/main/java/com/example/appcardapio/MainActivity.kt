@@ -41,6 +41,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        binding.loginButton.setOnClickListener {
+            // Invoke MenuActivity
+            Intent(applicationContext, MenuActivity::class.java).also {
+                startActivity(it)
+            }
+        }
+
         binding.accountRegisterButton.setOnClickListener{
             // Invoke UserRegisterActivity
             Intent(applicationContext, UserRegisterActivity::class.java).also {
