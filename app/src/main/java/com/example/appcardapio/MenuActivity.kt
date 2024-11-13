@@ -37,6 +37,13 @@ class MenuActivity: Activity() {
         binding.menuItemsRecylerview.adapter = adapter
         binding.menuItemsRecylerview.layoutManager = layoutManager
 
+        binding.reviewOrderButton.setOnClickListener {
+            // Invoke OrderActivity
+            Intent(applicationContext, OrderActivity::class.java).also {
+                startActivity(it)
+            }
+        }
+
         binding.logoutButton.setOnClickListener {
             finish()
         }

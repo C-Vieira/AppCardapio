@@ -29,6 +29,7 @@
         <activity android:name=".RecoverPasswordActivity" />
         <activity android:name=".MenuActivity" />
         <activity android:name=".MenuItemDetailsActivity" />
+        <activity android:name=".OrderActivity" />
 
     </application>
 

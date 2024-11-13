@@ -1,6 +1,6 @@
 package com.example.appcardapio
 
-class MenuItem (
+open class MenuItem (
     val name: String,
     val price: String
 )
