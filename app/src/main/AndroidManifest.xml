@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
+        android:name=".MainApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -16,7 +17,7 @@
         android:theme="@style/Theme.AppCardapio"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".login.presentation.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,8 +26,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".UserRegisterActivity" />
-        <activity android:name=".RecoverPasswordActivity" />
+        <activity android:name=".login.presentation.UserRegisterActivity" />
+        <activity android:name=".login.presentation.RecoverPasswordActivity" />
         <activity android:name=".MenuActivity" />
         <activity android:name=".MenuItemDetailsActivity" />
         <activity android:name=".OrderActivity" />
