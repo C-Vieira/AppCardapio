@@ -1,14 +1,11 @@
 package com.example.appcardapio.login.presentation
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.appcardapio.MenuActivity
 import com.example.appcardapio.databinding.RecoverPasswordViewBinding
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -22,10 +19,12 @@ class RecoverPasswordActivity: AppCompatActivity() {
         binding = RecoverPasswordViewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val actionManager = LoginActionManager(this)
+
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModel.uiAction.collect { action ->
-                    executeAction(action)
+                    actionManager.executeAction(action)
                 }
             }
         }
@@ -34,6 +33,7 @@ class RecoverPasswordActivity: AppCompatActivity() {
 
         binding.clearPasswordButton.setOnClickListener {
             viewModel.onRecoverPasswordClicked(getEmailText())
+            clearTextFields()
         }
 
         binding.goBackButton.setOnClickListener {
@@ -41,24 +41,7 @@ class RecoverPasswordActivity: AppCompatActivity() {
         }
     }
 
-    private fun executeAction(action: LoginAction){
-        when(action){
-            LoginAction.NAVIGATE_HOME -> navigateHome()
-            LoginAction.SHOW_ERROR_MSG -> showMessage("Ocorreu um erro...")
-            LoginAction.SHOW_RECOVER_MSG -> showMessage("Email de verificação enviado")
-        }
-    }
-
-    private fun navigateHome(){
-        // Invoke MenuActivity
-        Intent(applicationContext, MenuActivity::class.java).also {
-            startActivity(it)
-        }
-    }
-
-    private fun showMessage(msg: String){
-        Snackbar.make(findViewById(android.R.id.content), msg, Snackbar.LENGTH_LONG).show()
-    }
+    private fun clearTextFields() = binding.emailTxtField.text.clear()
 
     private fun getEmailText() = binding.emailTxtField.text.toString()
 }

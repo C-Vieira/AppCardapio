@@ -1,14 +1,11 @@
 package com.example.appcardapio.login.presentation
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.appcardapio.MenuActivity
 import com.example.appcardapio.databinding.UserRegisterViewBinding
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -22,10 +19,12 @@ class UserRegisterActivity: AppCompatActivity() {
         binding = UserRegisterViewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val actionManager = LoginActionManager(this)
+
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModel.uiAction.collect { action ->
-                    executeAction(action)
+                    actionManager.executeAction(action)
                 }
             }
         }
@@ -33,7 +32,8 @@ class UserRegisterActivity: AppCompatActivity() {
         viewModel.onViewCreated()
 
         binding.registerButton.setOnClickListener {
-            viewModel.onCreateAccountClicked(getEmailText(), getPasswordText())
+            viewModel.onCreateAccountClicked(getUserNameText() ,getEmailText(), getPasswordText(), getConfirmPasswordText())
+            clearTextFields()
         }
 
         binding.goBackButton.setOnClickListener {
@@ -41,27 +41,18 @@ class UserRegisterActivity: AppCompatActivity() {
         }
     }
 
-    private fun executeAction(action: LoginAction){
-        when(action){
-            LoginAction.NAVIGATE_HOME -> navigateHome()
-            LoginAction.SHOW_ERROR_MSG -> showMessage("Ocorreu um erro...")
-            LoginAction.SHOW_RECOVER_MSG -> showMessage("Email de verificação enviado")
-        }
+    private fun clearTextFields() {
+        binding.nameTxtField.text.clear()
+        binding.emailTxtField.text.clear()
+        binding.passwordTxtField.text.clear()
+        binding.confirmPasswordTxtField.text.clear()
     }
 
-    private fun navigateHome(){
-        // Invoke MenuActivity
-        Intent(applicationContext, MenuActivity::class.java).also {
-            startActivity(it)
-        }
-        finish()
-    }
-
-    private fun showMessage(msg: String){
-        Snackbar.make(findViewById(android.R.id.content), msg, Snackbar.LENGTH_LONG).show()
-    }
+    private fun getUserNameText() = binding.nameTxtField.text.toString()
 
     private fun getEmailText() = binding.emailTxtField.text.toString()
 
     private fun getPasswordText() = binding.passwordTxtField.text.toString()
+
+    private fun getConfirmPasswordText() = binding.confirmPasswordTxtField.text.toString()
 }

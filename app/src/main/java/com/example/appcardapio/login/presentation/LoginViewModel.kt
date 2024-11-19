@@ -14,6 +14,13 @@ class LoginViewModel(
     private val loginRepository: LoginRepository
 ): ViewModel() {
 
+    // Exception Strings
+    private val emptyTxtFields = "Given String is empty or null"
+    private val badEmailFormat = "The email address is badly formatted."
+    private val wrongCredentials = "The supplied auth credential is incorrect, malformed or has expired."
+    private val invalidPassword = "The given password is invalid. [ Password should be at least 6 characters ]"
+    private val passwordMismatch = "Password and password confirmation do not match"
+
     private val _uiAction = MutableSharedFlow<LoginAction>()
     val uiAction: SharedFlow<LoginAction> = _uiAction.asSharedFlow()
 
@@ -31,19 +38,37 @@ class LoginViewModel(
                 loginRepository.login(emailText, passwordText)
                 _uiAction.emit(LoginAction.NAVIGATE_HOME)
             }.onFailure { e ->
-                _uiAction.emit(LoginAction.SHOW_ERROR_MSG)
+                when(e.message){
+                    emptyTxtFields -> _uiAction.emit(LoginAction.SHOW_ERROR_MSG_EMPTY)
+                    badEmailFormat -> _uiAction.emit(LoginAction.SHOW_ERROR_MSG_BAD_EMAIL_FORMAT)
+                    wrongCredentials -> _uiAction.emit(LoginAction.SHOW_ERROR_MSG_WRONG_CREDENTIALS)
+                    else -> _uiAction.emit(LoginAction.SHOW_ERROR_MSG)
+                }
+
                 Log.e("LOGIN", e.message ?: "unknown", e)
             }
         }
     }
 
-    fun onCreateAccountClicked(emailText: String, passwordText: String){
+    fun onCreateAccountClicked(userNameText: String, emailText: String, passwordText: String, confirmPasswordText: String){
         viewModelScope.launch(Dispatchers.IO) {
             runCatching {
+                if(userNameText.isEmpty()
+                    || emailText.isEmpty()
+                    || confirmPasswordText.isEmpty()
+                    || passwordText.isEmpty()) throw Throwable(emptyTxtFields)
+                if(passwordText != confirmPasswordText) throw Throwable(passwordMismatch)
                 loginRepository.createAccount(emailText, passwordText)
-                _uiAction.emit(LoginAction.NAVIGATE_HOME)
+                _uiAction.emit(LoginAction.SHOW_ACCOUNT_CREATED_MSG)
             }.onFailure { e ->
-                _uiAction.emit(LoginAction.SHOW_ERROR_MSG)
+                when(e.message){
+                    emptyTxtFields -> _uiAction.emit(LoginAction.SHOW_ERROR_MSG_EMPTY)
+                    badEmailFormat -> _uiAction.emit(LoginAction.SHOW_ERROR_MSG_BAD_EMAIL_FORMAT)
+                    invalidPassword -> _uiAction.emit(LoginAction.SHOW_ERROR_MSG_INVALID_PASSWORD)
+                    passwordMismatch -> _uiAction.emit(LoginAction.SHOW_ERROR_MSG_PASSWORD_MISMATCH)
+                    else -> _uiAction.emit(LoginAction.SHOW_ERROR_MSG)
+                }
+
                 Log.e("LOGIN", e.message ?: "unknown", e)
             }
         }
@@ -55,7 +80,12 @@ class LoginViewModel(
                 loginRepository.recover(emailText)
                 _uiAction.emit(LoginAction.SHOW_RECOVER_MSG)
             }.onFailure { e ->
-                _uiAction.emit(LoginAction.SHOW_ERROR_MSG)
+                when(e.message){
+                    emptyTxtFields -> _uiAction.emit(LoginAction.SHOW_ERROR_MSG_EMPTY)
+                    badEmailFormat -> _uiAction.emit(LoginAction.SHOW_ERROR_MSG_BAD_EMAIL_FORMAT)
+                    else -> _uiAction.emit(LoginAction.SHOW_ERROR_MSG)
+                }
+
                 Log.e("LOGIN", e.message ?: "unknown", e)
             }
         }
