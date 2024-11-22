@@ -1,15 +1,24 @@
 package com.example.appcardapio.login.data.remote
 
+import android.icu.util.Calendar
 import com.example.appcardapio.login.model.UserAuth
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
 class LoginRemoteDataSourceImpl(
-    private val firebaseAuth: FirebaseAuth
+    private val firebaseAuth: FirebaseAuth,
+    private val firebaseFirestore: FirebaseFirestore
 ): LoginRemoteDataSource {
-    override suspend fun createAccount(email: String, password: String): UserAuth {
+    override suspend fun createAccount(userName: String, email: String, password: String): UserAuth {
         val authResult = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+
+        // Add userName to Firestore
+        firebaseFirestore.collection("usuarios")
+            .add(hashMapOf("nomeUsuario" to userName,
+                "dataCadastro" to Calendar.getInstance().time)).await()
+
         return mapToUserAuth(authResult)
     }
 

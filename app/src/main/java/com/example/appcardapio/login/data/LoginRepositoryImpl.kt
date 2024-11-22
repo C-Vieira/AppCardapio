@@ -10,8 +10,8 @@ class LoginRepositoryImpl(
         return loginRemoteDataSource.isSessionValid()
     }
 
-    override suspend fun createAccount(email: String, password: String): UserAuth {
-        return loginRemoteDataSource.createAccount(email, password)
+    override suspend fun createAccount(userName: String, email: String, password: String): UserAuth {
+        return loginRemoteDataSource.createAccount(userName, email, password)
     }
 
     override suspend fun login(email: String, password: String): UserAuth {

@@ -1,6 +1,7 @@
 package com.example.appcardapio.login.presentation
 
 import android.util.Log
+import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appcardapio.login.data.LoginRepository
@@ -57,8 +58,9 @@ class LoginViewModel(
                     || emailText.isEmpty()
                     || confirmPasswordText.isEmpty()
                     || passwordText.isEmpty()) throw Throwable(emptyTxtFields)
+                if(!Patterns.EMAIL_ADDRESS.matcher(emailText).matches()) throw Throwable(badEmailFormat)
                 if(passwordText != confirmPasswordText) throw Throwable(passwordMismatch)
-                loginRepository.createAccount(emailText, passwordText)
+                loginRepository.createAccount(userNameText, emailText, passwordText)
                 _uiAction.emit(LoginAction.SHOW_ACCOUNT_CREATED_MSG)
             }.onFailure { e ->
                 when(e.message){
