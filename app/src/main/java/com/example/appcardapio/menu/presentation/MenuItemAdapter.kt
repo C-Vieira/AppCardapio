@@ -1,9 +1,10 @@
-package com.example.appcardapio
+package com.example.appcardapio.menu.presentation
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appcardapio.databinding.MenuItemPreviewBinding
+import com.example.appcardapio.menu.model.MenuItem
 
 class MenuItemAdapter (
     private val items: List<MenuItem>,

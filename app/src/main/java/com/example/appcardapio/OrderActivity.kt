@@ -16,9 +16,9 @@ class OrderActivity: Activity() {
         setContentView(binding.root)
 
         val orderItemsSource = mutableListOf(
-            OrderItem("Item1", "9.99", 2),
-            OrderItem("Item2", "9.99", 3),
-            OrderItem("Item3", "9.99", 4)
+            OrderItem("", R.drawable.ic_food,"Item1", "Test", "unknown", "9.99", 1),
+            OrderItem("", R.drawable.ic_food,"Item2", "Test", "unknown", "9.99", 2),
+            OrderItem("", R.drawable.ic_food,"Item3", "Test", "unknown", "9.99", 3)
         )
 
         val adapter = OrderItemAdapter(orderItemsSource, ::onListItemClicked)

@@ -28,8 +28,8 @@
 
         <activity android:name=".login.presentation.UserRegisterActivity" />
         <activity android:name=".login.presentation.RecoverPasswordActivity" />
-        <activity android:name=".MenuActivity" />
-        <activity android:name=".MenuItemDetailsActivity" />
+        <activity android:name=".menu.presentation.MenuActivity" />
+        <activity android:name=".menu.presentation.MenuItemDetailsActivity" />
         <activity android:name=".OrderActivity"
             android:windowSoftInputMode="adjustPan"/>
 

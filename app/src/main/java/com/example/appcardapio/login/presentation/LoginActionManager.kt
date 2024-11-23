@@ -2,7 +2,7 @@ package com.example.appcardapio.login.presentation
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
-import com.example.appcardapio.MenuActivity
+import com.example.appcardapio.menu.presentation.MenuActivity
 import com.google.android.material.snackbar.Snackbar
 
 class LoginActionManager(
