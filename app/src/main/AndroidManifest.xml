@@ -30,7 +30,7 @@
         <activity android:name=".login.presentation.RecoverPasswordActivity" />
         <activity android:name=".menu.presentation.MenuActivity" />
         <activity android:name=".menu.presentation.MenuItemDetailsActivity" />
-        <activity android:name=".OrderActivity"
+        <activity android:name=".order.presentation.OrderActivity"
             android:windowSoftInputMode="adjustPan"/>
 
     </application>

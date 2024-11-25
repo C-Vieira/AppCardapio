@@ -36,15 +36,26 @@
         />
 
     <TextView
-        android:id="@+id/menu_item_price"
+        android:id="@+id/menu_item_price_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginStart="8dp"
-        android:text="Preço"
+        android:text="R$ "
 
         app:layout_constraintTop_toBottomOf="@id/menu_item_name"
         app:layout_constraintStart_toEndOf="@id/menu_item_image_view"
+        />
+
+    <TextView
+        android:id="@+id/menu_item_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="0,00"
+
+        app:layout_constraintTop_toBottomOf="@id/menu_item_name"
+        app:layout_constraintStart_toEndOf="@id/menu_item_price_text"
         />
 
     <ImageView

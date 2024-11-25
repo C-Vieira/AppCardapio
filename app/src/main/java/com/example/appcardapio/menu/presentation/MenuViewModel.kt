@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.appcardapio.menu.data.MenuRepository
 import com.example.appcardapio.menu.model.MenuItem
+import com.example.appcardapio.order.data.OrderRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +18,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class MenuViewModel(
-    private val menuRepository: MenuRepository
+    private val menuRepository: MenuRepository,
+    private val orderRepository: OrderRepository
 ): ViewModel() {
     private var _currentItemState = MutableStateFlow(MenuItem())
     val currentItemState: StateFlow<MenuItem> = _currentItemState.asStateFlow()
@@ -27,6 +29,18 @@ class MenuViewModel(
 
     fun getMenuItemSource(): List<MenuItem> = runBlocking {
         menuRepository.getMenuItems()
+    }
+
+    fun onAddToOrderClicked(name: String, price: String, amount: Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            runCatching {
+                orderRepository.addOrderItem(name, price, amount)
+                _uiAction.emit(MenuAction.SHOW_ADDED_TO_ORDER_MSG)
+            }.onFailure { e ->
+                _uiAction.emit(MenuAction.SHOW_ERROR_MSG)
+                Log.e("MENU", e.message ?: "unknown", e)
+            }
+        }
     }
 
     fun onMenuItemClicked(selectedItem: MenuItem){

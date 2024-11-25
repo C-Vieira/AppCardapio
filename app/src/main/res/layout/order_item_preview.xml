@@ -35,15 +35,26 @@
         />
 
     <TextView
-        android:id="@+id/order_item_price_total"
+        android:id="@+id/order_item_price_total_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginStart="8dp"
-        android:text="PreçoTotal"
+        android:text="R$ "
 
         app:layout_constraintTop_toBottomOf="@id/order_item_name"
         app:layout_constraintStart_toEndOf="@id/delete_order_item_image_button"
+        />
+
+    <TextView
+        android:id="@+id/order_item_price_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="0,00"
+
+        app:layout_constraintTop_toBottomOf="@id/order_item_name"
+        app:layout_constraintStart_toEndOf="@id/order_item_price_total_text"
         />
 
     <TextView
@@ -60,15 +71,26 @@
         />
 
     <TextView
-        android:id="@+id/order_item_price"
+        android:id="@+id/order_item_price_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginStart="16dp"
-        android:text="PreçoUni"
+        android:text="R$ "
 
         app:layout_constraintTop_toBottomOf="@id/order_item_amount"
         app:layout_constraintStart_toEndOf="@id/order_item_price_total"
+        />
+
+    <TextView
+        android:id="@+id/order_item_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="0,00"
+
+        app:layout_constraintTop_toBottomOf="@id/order_item_amount"
+        app:layout_constraintStart_toEndOf="@id/order_item_price_text"
         />
 
     <ImageButton

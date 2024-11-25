@@ -23,6 +23,14 @@ class MenuActivity: AppCompatActivity() {
 
         val actionManager = MenuActionManager(this)
 
+        val menuItemSource = viewModel.getMenuItemSource()
+
+        val adapter = MenuItemAdapter(menuItemSource, ::onListItemClicked)
+        val layoutManager = LinearLayoutManager(this)
+
+        binding.menuItemsRecylerview.adapter = adapter
+        binding.menuItemsRecylerview.layoutManager = layoutManager
+
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModel.uiAction.collect { action ->
@@ -30,14 +38,6 @@ class MenuActivity: AppCompatActivity() {
                 }
             }
         }
-
-        val menuItemsSource = viewModel.getMenuItemSource()
-
-        val adapter = MenuItemAdapter(menuItemsSource, ::onListItemClicked)
-        val layoutManager = LinearLayoutManager(this)
-
-        binding.menuItemsRecylerview.adapter = adapter
-        binding.menuItemsRecylerview.layoutManager = layoutManager
 
         binding.reviewOrderButton.setOnClickListener {
             viewModel.onOrderClicked()

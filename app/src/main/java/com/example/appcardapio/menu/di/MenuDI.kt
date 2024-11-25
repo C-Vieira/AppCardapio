@@ -19,6 +19,6 @@ val menuModule = module {
     }
 
     viewModel {
-        MenuViewModel(menuRepository = get())
+        MenuViewModel(menuRepository = get(), orderRepository = get())
     }
 }

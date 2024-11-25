@@ -2,7 +2,7 @@ package com.example.appcardapio.menu.presentation
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
-import com.example.appcardapio.OrderActivity
+import com.example.appcardapio.order.presentation.OrderActivity
 import com.google.android.material.snackbar.Snackbar
 
 class MenuActionManager(
@@ -12,6 +12,7 @@ class MenuActionManager(
         when(action){
             MenuAction.NAVIGATE_TO_DETAILS -> navigateToDetails()
             MenuAction.NAVIGATE_TO_ORDER -> navigateToOrder()
+            MenuAction.SHOW_ADDED_TO_ORDER_MSG -> showMessage("Item Adicionado ao Pedido")
             MenuAction.SHOW_ERROR_MSG -> showMessage("Algo deu errado, Tente Novamente...")
         }
     }

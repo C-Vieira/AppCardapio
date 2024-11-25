@@ -16,8 +16,10 @@ class LoginRemoteDataSourceImpl(
 
         // Add userName to Firestore
         firebaseFirestore.collection("usuarios")
-            .add(hashMapOf("nomeUsuario" to userName,
-                "dataCadastro" to Calendar.getInstance().time)).await()
+            .add(hashMapOf(
+                "nomeUsuario" to userName,
+                "dataCadastro" to Calendar.getInstance().time)
+            ).await()
 
         return mapToUserAuth(authResult)
     }

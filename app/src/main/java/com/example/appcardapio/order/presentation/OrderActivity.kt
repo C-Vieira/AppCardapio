@@ -1,13 +1,16 @@
-package com.example.appcardapio
+package com.example.appcardapio.order.presentation
 
-import android.app.Activity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appcardapio.databinding.OrderViewBinding
+import com.example.appcardapio.order.model.OrderItem
 import com.google.android.material.snackbar.Snackbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class OrderActivity: Activity() {
+class OrderActivity: AppCompatActivity() {
     private lateinit var binding: OrderViewBinding
+    private val viewModel: OrderViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -15,13 +18,9 @@ class OrderActivity: Activity() {
         binding = OrderViewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val orderItemsSource = mutableListOf(
-            OrderItem("", R.drawable.ic_food,"Item1", "Test", "unknown", "9.99", 1),
-            OrderItem("", R.drawable.ic_food,"Item2", "Test", "unknown", "9.99", 2),
-            OrderItem("", R.drawable.ic_food,"Item3", "Test", "unknown", "9.99", 3)
-        )
+        val orderItemSource = viewModel.getOrderItemSource()
 
-        val adapter = OrderItemAdapter(orderItemsSource, ::onListItemClicked)
+        val adapter = OrderItemAdapter(orderItemSource, ::onListItemClicked)
         val layoutManager = LinearLayoutManager(this)
 
         binding.orderItemsRecylerview.adapter = adapter
