@@ -9,7 +9,8 @@ import com.google.android.material.snackbar.Snackbar
 
 class OrderItemAdapter (
     private val items: List<OrderItem>,
-    private val onClick: (OrderItem) -> Unit
+    private val onIncrementOrDecrementButtonClick: (OrderItem, Int) -> Unit,
+    private val onDeleteButtonClick: (OrderItem) -> Unit
 ) : RecyclerView.Adapter<OrderItemAdapter.ViewHolder>() {
 
     inner class ViewHolder(
@@ -19,9 +20,24 @@ class OrderItemAdapter (
         private var currentItem: OrderItem? = null
 
         init {
-            itemView.setOnClickListener {
+            binding.orderItemIncButton.setOnClickListener{
                 currentItem?.let {
-                    onClick(it)
+                    onIncrementOrDecrementButtonClick(
+                        OrderItem(it.name, it.price, it.amount), it.amount + 1)
+                }
+            }
+
+            binding.orderItemDecButton.setOnClickListener{
+                currentItem?.let {
+                    onIncrementOrDecrementButtonClick(
+                        OrderItem(it.name, it.price, it.amount), it.amount - 1)
+                }
+            }
+
+            binding.deleteOrderItemImageButton.setOnClickListener{
+                Snackbar.make(itemView, "Deletando item do pedido", Snackbar.LENGTH_SHORT).show()
+                currentItem?.let {
+                    onDeleteButtonClick(OrderItem(currentItem!!.name, currentItem!!.price, currentItem!!.amount))
                 }
             }
         }
@@ -37,11 +53,8 @@ class OrderItemAdapter (
             binding.orderItemPrice.text = item.price
             binding.orderItemPriceTotal.text = item.totalPrice.toString()
 
-            binding.deleteOrderItemImageButton.setOnClickListener{
-                Snackbar.make(itemView, "Deletando item do pedido", Snackbar.LENGTH_SHORT).show()
-            }
-        }
 
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

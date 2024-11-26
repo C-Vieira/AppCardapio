@@ -10,7 +10,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val orderModule = module {
-    factory<OrderRemoteDataSource> {
+    single<OrderRemoteDataSource> {
         OrderRemoteDataSourceImpl(firebaseFirestore = FirebaseFirestore.getInstance())
     }
 

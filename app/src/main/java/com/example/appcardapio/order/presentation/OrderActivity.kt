@@ -2,10 +2,14 @@ package com.example.appcardapio.order.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appcardapio.databinding.OrderViewBinding
 import com.example.appcardapio.order.model.OrderItem
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class OrderActivity: AppCompatActivity() {
@@ -18,13 +22,22 @@ class OrderActivity: AppCompatActivity() {
         binding = OrderViewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val orderItemSource = viewModel.getOrderItemSource()
-
-        val adapter = OrderItemAdapter(orderItemSource, ::onListItemClicked)
         val layoutManager = LinearLayoutManager(this)
-
-        binding.orderItemsRecylerview.adapter = adapter
         binding.orderItemsRecylerview.layoutManager = layoutManager
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.onOrderViewCreated()
+                viewModel.orderItemsState.collect { orderItems ->
+                    val adapter = OrderItemAdapter(
+                        orderItems,
+                        ::onIncrementOrDecrementButtonClicked,
+                        ::onDeleteButtonClicked
+                    )
+                    binding.orderItemsRecylerview.adapter = adapter
+                }
+            }
+        }
 
         binding.logoutButton.setOnClickListener {
             finish()
@@ -35,7 +48,11 @@ class OrderActivity: AppCompatActivity() {
         }
     }
 
-    private fun onListItemClicked(orderItem: OrderItem) {
+    private fun onIncrementOrDecrementButtonClicked(orderItem: OrderItem, i: Int) {
+        viewModel.onIncrementOrDecrementButtonClicked(orderItem, i)
+    }
 
+    private fun onDeleteButtonClicked(orderItem: OrderItem) {
+        viewModel.onDeleteButtonClicked(orderItem)
     }
 }
