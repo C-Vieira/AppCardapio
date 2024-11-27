@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appcardapio.databinding.MenuViewBinding
 import com.example.appcardapio.menu.model.MenuItem
@@ -23,9 +24,17 @@ class MenuActivity: AppCompatActivity() {
 
         val actionManager = MenuActionManager(this)
 
-        val menuItemSource = viewModel.getMenuItemSource()
+        val partyMenuItemSource = viewModel.getMenuItemSource().filter { it.category == "festa" }
+        val cupsMenuItemSource = viewModel.getMenuItemSource().filter { it.category == "copos" }
 
-        val adapter = MenuItemAdapter(menuItemSource, ::onListItemClicked)
+        val partyHeaderAdapter = CategoryHeaderAdapter("Doces de Festa")
+        val cupsHeaderAdapter = CategoryHeaderAdapter("Copos da Felicidade")
+
+        val partyMenuItemAdapter = MenuItemAdapter(partyMenuItemSource, ::onListItemClicked)
+        val cupsMenuItemAdapter = MenuItemAdapter(cupsMenuItemSource, ::onListItemClicked)
+
+        val adapter = ConcatAdapter(partyHeaderAdapter, partyMenuItemAdapter, cupsHeaderAdapter, cupsMenuItemAdapter)
+
         val layoutManager = LinearLayoutManager(this)
 
         binding.menuItemsRecylerview.adapter = adapter

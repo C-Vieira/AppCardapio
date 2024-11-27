@@ -1,8 +1,11 @@
 package com.example.appcardapio.menu.presentation
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.appcardapio.databinding.MenuItemPreviewBinding
 import com.example.appcardapio.menu.model.MenuItem
 
@@ -30,6 +33,13 @@ class MenuItemAdapter (
 
             binding.menuItemName.text = item.name
             binding.menuItemPrice.text = item.price
+
+            Glide.with(binding.root.context)
+                .load(item.icon)
+                .error(ColorDrawable(Color.BLACK))
+                .placeholder(ColorDrawable(Color.LTGRAY))
+                .centerCrop()
+                .into(binding.menuItemImageView)
         }
 
     }
