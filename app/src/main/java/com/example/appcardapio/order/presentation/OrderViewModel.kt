@@ -50,7 +50,11 @@ class OrderViewModel(
     fun onConfirmOrderClicked(){
         viewModelScope.launch(Dispatchers.IO) {
             runCatching {
-                if(getOrderItemSource().isNotEmpty()) _uiAction.emit(OrderAction.SHOW_ORDER_CONFIRMED_MSG)
+                if(getOrderItemSource().isNotEmpty()){
+                    orderRepository.clearOrderItems()
+                    _uiAction.emit(OrderAction.SHOW_ORDER_CONFIRMED_MSG)
+                    _uiAction.emit(OrderAction.UPDATE_UI)
+                }
                 else _uiAction.emit(OrderAction.SHOW_EMPTY_ORDER_MSG)
             }.onFailure { e ->
                 _uiAction.emit(OrderAction.SHOW_ERROR_MSG)

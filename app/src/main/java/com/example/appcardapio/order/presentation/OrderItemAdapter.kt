@@ -46,8 +46,6 @@ class OrderItemAdapter (
             binding.orderItemName.text = item.name
             binding.orderItemAmount.text = item.amount.toString()
 
-            binding.orderItemAmountInput.setText(item.amount.toString())
-
             binding.orderItemPrice.text = item.price
             binding.orderItemPriceTotal.text = item.totalPrice.toString()
 

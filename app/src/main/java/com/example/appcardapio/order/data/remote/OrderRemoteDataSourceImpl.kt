@@ -77,4 +77,12 @@ class OrderRemoteDataSourceImpl(
             }
         }
     }
+
+    override suspend fun clearOrderItems() {
+        // Delete all items from orderItem collection
+        val orderItemCollection = orderItemsCollectionRef.get().await()
+        for(document in orderItemCollection.documents){
+            orderItemsCollectionRef.document(document.id).delete().await()
+        }
+    }
 }

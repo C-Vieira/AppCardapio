@@ -21,4 +21,8 @@ class OrderRepositoryImpl(
     override suspend fun updateOrderItem(orderItem: OrderItem, newAmount: Int) {
         orderRemoteDataSource.updateOrderItem(orderItem, newAmount)
     }
+
+    override suspend fun clearOrderItems() {
+        orderRemoteDataSource.clearOrderItems()
+    }
 }
