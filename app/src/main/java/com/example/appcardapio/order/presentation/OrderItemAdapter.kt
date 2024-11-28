@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appcardapio.databinding.OrderItemPreviewBinding
 import com.example.appcardapio.order.model.OrderItem
-import com.google.android.material.snackbar.Snackbar
 
 class OrderItemAdapter (
     private val items: List<OrderItem>,
@@ -35,7 +34,6 @@ class OrderItemAdapter (
             }
 
             binding.deleteOrderItemImageButton.setOnClickListener{
-                Snackbar.make(itemView, "Deletando item do pedido", Snackbar.LENGTH_SHORT).show()
                 currentItem?.let {
                     onDeleteButtonClick(OrderItem(currentItem!!.name, currentItem!!.price, currentItem!!.amount))
                 }

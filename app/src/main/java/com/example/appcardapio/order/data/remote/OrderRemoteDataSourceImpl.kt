@@ -4,26 +4,12 @@ import com.example.appcardapio.order.model.OrderItem
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.tasks.await
 
 class OrderRemoteDataSourceImpl(
     private val firebaseFirestore: FirebaseFirestore
 ): OrderRemoteDataSource {
     private val orderItemsCollectionRef: CollectionReference = firebaseFirestore.collection("orderItems")
-
-    private var _orderItemsDataSourceState = MutableStateFlow(listOf<OrderItem>())
-    //val orderItemsDataSourceState: StateFlow<List<OrderItem>> = _orderItemsDataSourceState.asStateFlow()
-
-    init {
-        subscribeToRealTimeUpdates()
-    }
-
-    override fun getOrderItemState(): StateFlow<List<OrderItem>> {
-        return _orderItemsDataSourceState
-    }
 
     override suspend fun getOrderItems(): List<OrderItem> {
         val collection = orderItemsCollectionRef.get().await()
@@ -36,30 +22,28 @@ class OrderRemoteDataSourceImpl(
         return orderItems
     }
 
-    private fun subscribeToRealTimeUpdates() {
-        orderItemsCollectionRef.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-            firebaseFirestoreException?.let {
-                return@addSnapshotListener
-            }
-            querySnapshot?.let { snapshot ->
-                val newOrderItems = mutableListOf(OrderItem())
-                for(orderItem in snapshot){
-                    orderItem.toObject<OrderItem>().let { newOrderItems.add(it) }
-                }
+    override suspend fun addOrderItem(name: String, price: String, amount: Int) {
+        // Check for duplicates
+        val orderItemQuery = orderItemsCollectionRef
+            .whereEqualTo("name", name)
+            .get()
+            .await()
 
-                _orderItemsDataSourceState.update { newOrderItems }
+        if(orderItemQuery.documents.isEmpty()){
+            // Add OrderItem to Firestore
+            firebaseFirestore.collection("orderItems")
+                .add(hashMapOf(
+                    "name" to name,
+                    "price" to price,
+                    "amount" to amount
+                )).await()
+        }else{
+            // Increment the amount by one
+            for(document in orderItemQuery){
+                val currentAmount = document.get("amount").toString().toInt()
+                updateOrderItem(OrderItem(name, price, currentAmount), currentAmount + 1)
             }
         }
-    }
-
-    override suspend fun addOrderItem(name: String, price: String, amount: Int) {
-        // Add OrderItem to Firestore
-        firebaseFirestore.collection("orderItems")
-            .add(hashMapOf(
-                "name" to name,
-                "price" to price,
-                "amount" to amount
-            )).await()
     }
 
     override suspend fun deleteOrderItem(orderItem: OrderItem) {
@@ -86,8 +70,10 @@ class OrderRemoteDataSourceImpl(
             .await()
 
         if(orderItemQuery.documents.isNotEmpty()){
-            for(document in orderItemQuery){
-                orderItemsCollectionRef.document(document.id).update("amount", newAmount).await()
+            if(newAmount > 0){ // Disallow zero or negative amounts
+                for(document in orderItemQuery){
+                    orderItemsCollectionRef.document(document.id).update("amount", newAmount).await()
+                }
             }
         }
     }

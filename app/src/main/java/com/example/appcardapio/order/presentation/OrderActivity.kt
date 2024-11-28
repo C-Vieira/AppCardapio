@@ -8,7 +8,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appcardapio.databinding.OrderViewBinding
 import com.example.appcardapio.order.model.OrderItem
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -22,19 +21,26 @@ class OrderActivity: AppCompatActivity() {
         binding = OrderViewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val actionManager = OrderActionManager(this)
+
+        val orderItemSource = viewModel.getOrderItemSource()
+
+        val adapter = OrderItemAdapter(
+            orderItemSource,
+            ::onIncrementOrDecrementButtonClicked,
+            ::onDeleteButtonClicked
+        )
+        binding.orderItemsRecylerview.adapter = adapter
+
+        binding.orderPriceTotal.text = calculateTotalPrice(orderItemSource)
+
         val layoutManager = LinearLayoutManager(this)
         binding.orderItemsRecylerview.layoutManager = layoutManager
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModel.onOrderViewCreated()
-                viewModel.orderItemsState.collect { orderItems ->
-                    val adapter = OrderItemAdapter(
-                        orderItems,
-                        ::onIncrementOrDecrementButtonClicked,
-                        ::onDeleteButtonClicked
-                    )
-                    binding.orderItemsRecylerview.adapter = adapter
+                viewModel.uiAction.collect { action ->
+                    actionManager.executeAction(action)
                 }
             }
         }
@@ -44,7 +50,7 @@ class OrderActivity: AppCompatActivity() {
         }
 
         binding.confirmOrderButton.setOnClickListener {
-            Snackbar.make(findViewById(android.R.id.content), "Pedido Confirmado com Sucesso!", Snackbar.LENGTH_LONG).show()
+            viewModel.onConfirmOrderClicked()
         }
     }
 
@@ -54,5 +60,28 @@ class OrderActivity: AppCompatActivity() {
 
     private fun onDeleteButtonClicked(orderItem: OrderItem) {
         viewModel.onDeleteButtonClicked(orderItem)
+    }
+
+    fun updateUI(){
+        // Get new item source and bind a new adapter
+        val orderItemSource = viewModel.getOrderItemSource()
+
+        val adapter = OrderItemAdapter(
+            orderItemSource,
+            ::onIncrementOrDecrementButtonClicked,
+            ::onDeleteButtonClicked
+        )
+        binding.orderItemsRecylerview.adapter = adapter
+
+        // Re-calculate total order price
+        binding.orderPriceTotal.text = calculateTotalPrice(orderItemSource)
+    }
+
+    private fun calculateTotalPrice(orderItems: List<OrderItem>): String{
+        var total = 0.0
+        for (item in orderItems){
+            total += item.totalPrice
+        }
+        return total.toString()
     }
 }
