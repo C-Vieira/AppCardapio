@@ -2,8 +2,7 @@ package com.example.appcardapio.menu.model
 
 import com.example.appcardapio.R
 
-open class MenuItem (
-    val imageUrl: String = "",
+open class MenuItem(
     val name: String = "unknown",
     val description: String = "unknown",
     val category: String = "unknown",
