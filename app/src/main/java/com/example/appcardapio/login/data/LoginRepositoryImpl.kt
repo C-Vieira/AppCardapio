@@ -1,5 +1,6 @@
 package com.example.appcardapio.login.data
 
+import android.graphics.Bitmap
 import com.example.appcardapio.login.data.remote.LoginRemoteDataSource
 import com.example.appcardapio.login.model.UserAuth
 
@@ -20,5 +21,9 @@ class LoginRepositoryImpl(
 
     override suspend fun recover(email: String) {
         loginRemoteDataSource.recover(email)
+    }
+
+    override suspend fun getLogoImage(): Bitmap? {
+        return loginRemoteDataSource.getLogoImage()
     }
 }

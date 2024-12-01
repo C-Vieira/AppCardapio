@@ -1,10 +1,13 @@
 package com.example.appcardapio.menu.presentation
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.bumptech.glide.Glide
 import com.example.appcardapio.databinding.MenuItemDetailsViewBinding
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -26,6 +29,13 @@ class MenuItemDetailsActivity: AppCompatActivity() {
                 viewModel.currentItemState.collect{ selectedItem ->
                     viewModel.onDetailsViewCreated()
                     with(binding){
+                        Glide.with(this@MenuItemDetailsActivity)
+                            .load(viewModel.getMenuItemImage(selectedItem.name) ?: ColorDrawable(Color.BLACK))
+                            .centerCrop()
+                            .placeholder(ColorDrawable(Color.BLACK))
+                            .error(ColorDrawable(Color.LTGRAY))
+                            .into(menuItemDetailsImageView)
+
                         menuItemDetailsName.text = selectedItem.name
                         menuItemDetailsDescription.text = selectedItem.description
                         menuItemDetailsPrice.text = selectedItem.price

@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         Glide.with(this)
-            .load(ColorDrawable(Color.BLACK))
+            .load(viewModel.getLogoImage() ?: ColorDrawable(Color.BLACK))
             .centerCrop()
             .placeholder(ColorDrawable(Color.BLACK))
             .error(ColorDrawable(Color.LTGRAY))

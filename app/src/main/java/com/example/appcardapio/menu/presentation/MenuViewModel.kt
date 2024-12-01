@@ -76,4 +76,8 @@ class MenuViewModel(
             }
         }
     }
+
+    fun getMenuItemImage(name: String) = runBlocking {
+        menuRepository.getMenuItemImage(name)
+    }
 }

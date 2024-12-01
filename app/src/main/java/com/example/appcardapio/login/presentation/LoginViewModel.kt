@@ -1,5 +1,6 @@
 package com.example.appcardapio.login.presentation
 
+import android.graphics.Bitmap
 import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
@@ -10,6 +11,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class LoginViewModel(
     private val loginRepository: LoginRepository
@@ -31,6 +33,10 @@ class LoginViewModel(
                 _uiAction.emit(LoginAction.NAVIGATE_HOME)
             }
         }
+    }
+
+    fun getLogoImage(): Bitmap? = runBlocking {
+        loginRepository.getLogoImage()
     }
 
     fun onLoginClicked(emailText: String, passwordText: String){
