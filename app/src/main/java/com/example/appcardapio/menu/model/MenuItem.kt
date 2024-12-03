@@ -11,6 +11,7 @@ open class MenuItem(
     val icon: Int get() = when(category){
         "festa" -> R.drawable.ic_cookie
         "copos" -> R.drawable.ic_ice_cream
+        "bolos" -> R.drawable.ic_cake
         else -> R.drawable.ic_food
     }
 }

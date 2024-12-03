@@ -26,14 +26,21 @@ class MenuActivity: AppCompatActivity() {
 
         val partyMenuItemSource = viewModel.getMenuItemSource().filter { it.category == "festa" }
         val cupsMenuItemSource = viewModel.getMenuItemSource().filter { it.category == "copos" }
+        val cakeMenuItemSource = viewModel.getMenuItemSource().filter { it.category == "bolos" }
 
         val partyHeaderAdapter = CategoryHeaderAdapter("Doces de Festa")
         val cupsHeaderAdapter = CategoryHeaderAdapter("Copos da Felicidade")
+        val cakeHeaderAdapter = CategoryHeaderAdapter("Bolos")
 
         val partyMenuItemAdapter = MenuItemAdapter(partyMenuItemSource, ::onListItemClicked)
         val cupsMenuItemAdapter = MenuItemAdapter(cupsMenuItemSource, ::onListItemClicked)
+        val cakeMenuItemAdapter = MenuItemAdapter(cakeMenuItemSource, ::onListItemClicked)
 
-        val adapter = ConcatAdapter(partyHeaderAdapter, partyMenuItemAdapter, cupsHeaderAdapter, cupsMenuItemAdapter)
+        val adapter = ConcatAdapter(
+            partyHeaderAdapter, partyMenuItemAdapter,
+            cupsHeaderAdapter, cupsMenuItemAdapter,
+            cakeHeaderAdapter, cakeMenuItemAdapter
+        )
 
         val layoutManager = LinearLayoutManager(this)
 
